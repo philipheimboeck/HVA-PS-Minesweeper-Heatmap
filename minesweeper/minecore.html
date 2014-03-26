@@ -29,6 +29,7 @@
 <script type="text/javascript" src="minecookie.js"></script>
 
 <script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/jquery.couch.js"></script>
 <script type="text/javascript" src="HeatMapData.js"></script>
 
 
@@ -385,7 +386,11 @@ function openCell(x,y) {
          isExposed = true;
          dead = true;
          updateNumBombs();
-         deathShowBombs(); }
+         deathShowBombs(); 
+		 
+		 //Save to Couch
+		 hmd.saveToCouch();
+		 }
       else {
          document.images[imageIndexOf(x,y)].src =  cellOpenIm[neighborBombs].src; 
          isExposed = true;
@@ -397,6 +402,9 @@ function openCell(x,y) {
             clockStop();
             winShowFlags();
             winShowWindow();
+			
+			// Save to couch
+			hmd.saveToCouch();
             } } } }
          
 
@@ -662,8 +670,7 @@ function removeBomb(x,y) {
    if (cellArray[arrayIndexOf(x,y)].isBomb) {
       for (i=x-1; i<=x+1; i++) {
         for (j=y-1; j<=y+1; j++) {
-            removeNeighbor(i,j); 
-			hmd.removeBombPosition(i,j);
+            removeNeighbor(i,j);
 		} 
 	  } 
       cellArray[arrayIndexOf(x,y)].isBomb = false;
@@ -682,7 +689,6 @@ function placeBombRandomLoc() {
          i = floor(random() * (maxX+1));
          j = floor(random() * (maxY+1)); }
       bombPlaced = (placeBomb(i,j));
-	  hmd.addBombPosition(i,j);
 	} }
 
 
