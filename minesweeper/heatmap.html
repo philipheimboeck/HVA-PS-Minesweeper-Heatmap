@@ -11,7 +11,7 @@ window.onload = function(){
     // heatmap configuration
     var config = {
         element: document.getElementById("heatmapArea"),
-        radius: 10,
+        radius: 30,
         opacity: 50,
         legend: {
             position: 'br',
@@ -43,7 +43,7 @@ window.onload = function(){
 				var v = {
 					x: (data.rows[i].key[0] + 0.5) * data.rows.length, 
 					y: (data.rows[i].key[1] + 0.5) * data.rows.length, 
-					count: data.rows[i].value * 10
+					count: data.rows[i].value
 				};
 				heatmapData.data.push(v);
 				
