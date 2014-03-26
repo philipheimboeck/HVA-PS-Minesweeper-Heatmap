@@ -1,0 +1,15 @@
+/** bombs/numberOfBombs **/
+
+// MAP
+function(doc) {
+  for ( var i = 0; i < doc.fields.length; i++ ) {
+    if ( doc.fields[i].value.isBomb == true ) {
+      emit([doc.fields[i].x, doc.fields[i].y], 1);
+    }
+  }
+}
+
+// REDUCE
+function (key, values, rereduce) {
+  return sum(values);
+}

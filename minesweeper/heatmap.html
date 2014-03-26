@@ -1,0 +1,75 @@
+<html>
+	<head>
+    <title>CouchDB Test</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="js/jquery-2.1.0.min.js"></script>
+	<script src="js/jquery.couch.js"></script>
+	<script src="js/heatmap.js"></script>
+	<script type="text/javascript">
+window.onload = function(){
+ 
+    // heatmap configuration
+    var config = {
+        element: document.getElementById("heatmapArea"),
+        radius: 10,
+        opacity: 50,
+        legend: {
+            position: 'br',
+            title: 'Example Distribution'
+        }   
+    };
+    
+    //creates and initializes the heatmap
+    var heatmap = h337.create(config);
+ 
+    // let's get some data
+    var heatmapData = {
+        max: 10,
+        data: [
+            //{ x: 10, y: 20, count: 18 },
+            //{ x: 25, y: 25, count: 14 },
+            //{ x: 50, y: 30, count: 20 }
+            // ...
+        ]
+    };
+	
+	//var data;
+	$.couch.urlPrefix = "http://localhost:5984";
+	$.couch.db("minesweeper").view("bombs/numberOfBombs", {
+		success: function(data) {
+			
+		    for ( var i = 0; i < data.rows.length; i++ ) {
+				// Add data to map
+				var v = {
+					x: (data.rows[i].key[0] + 0.5) * data.rows.length, 
+					y: (data.rows[i].key[1] + 0.5) * data.rows.length, 
+					count: data.rows[i].value * 10
+				};
+				heatmapData.data.push(v);
+				
+				// New maximum?
+				if ( heatmapData.max < data.rows[i].value ) 
+					heatmapData.max = data.rows[i].value;
+			}
+			console.log(heatmapData);
+			
+			// Set dataset to heatmap
+			heatmap.store.setDataSet(heatmapData);
+		},
+		error: function(status) {
+			console.log(status);
+		},
+		reduce: true,
+		group: true
+	});
+ 
+   
+};
+</script>
+  </head>
+ 
+  <body>
+	<div id="heatmapArea" class="well" style="width:610px;padding:0;height:400px;cursor:pointer;position:relative;">
+	</div>
+  </body>
+</html>
