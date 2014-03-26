@@ -1,0 +1,8 @@
+Because of Same Origin Policy, set the following settings in 
+local.ini
+
+[httpd]
+enable_cors = true
+
+[cors]
+origins = *
