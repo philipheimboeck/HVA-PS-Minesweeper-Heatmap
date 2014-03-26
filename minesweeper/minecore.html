@@ -28,6 +28,9 @@
 
 <script type="text/javascript" src="minecookie.js"></script>
 
+<script src="js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="HeatMapData.js"></script>
+
 
 <!-- Create the menus 
      Uses DHTML layers, with a table around them.  Note the use of 
@@ -74,6 +77,10 @@
   </td></tr></table>
 </div>
 
+<script type="text/javascript">
+	// Initialize Heat Map Data class
+	var hmd = new HeatMapData();
+</script>
 
 <script type="text/javascript">
 // Use this in addition to the comment block because the w3c validator chokes on the Javascript decrement operator "--"
@@ -654,8 +661,11 @@ function placeBomb(x,y) {
 function removeBomb(x,y) {
    if (cellArray[arrayIndexOf(x,y)].isBomb) {
       for (i=x-1; i<=x+1; i++) {
-         for (j=y-1; j<=y+1; j++) {
-            removeNeighbor(i,j); } } 
+        for (j=y-1; j<=y+1; j++) {
+            removeNeighbor(i,j); 
+			hmd.removeBombPosition(i,j);
+		} 
+	  } 
       cellArray[arrayIndexOf(x,y)].isBomb = false;
       return true; } 
    else
@@ -671,7 +681,9 @@ function placeBombRandomLoc() {
       with (Math) {
          i = floor(random() * (maxX+1));
          j = floor(random() * (maxY+1)); }
-      bombPlaced = (placeBomb(i,j)) } }
+      bombPlaced = (placeBomb(i,j));
+	  hmd.addBombPosition(i,j);
+	} }
 
 
 // Does a complete clear of the internal board cell objects.
