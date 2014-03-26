@@ -142,6 +142,9 @@ function calcHeight(maxY) {
       maxY = 7;
       maxNumBombs = 10;
       gameFormat = "Beginner"; } } }
+	  
+	// Set Game Size
+	hmd.setGameSize(maxX, maxY);
       
    // This pre-calc just makes the next "if" easier to handle.
    maxLegalBombs = Math.round((maxX+1)*(maxY+1) / 3)  // Max 1/3 of all cells
@@ -388,6 +391,10 @@ function openCell(x,y) {
          updateNumBombs();
          deathShowBombs(); 
 		 
+		 // Save User/Game Information
+		 hmd.setLastClick(x,y);
+		 hmd.hasWon(false);
+		 hmd.saveGameData(cellArray);
 		 //Save to Couch
 		 hmd.saveToCouch();
 		 }
@@ -403,6 +410,10 @@ function openCell(x,y) {
             winShowFlags();
             winShowWindow();
 			
+			// Save User/Game Information
+			hmd.setLastClick(x,y);
+			hmd.hasWon(false);
+			hmd.saveGameData(cellArray);
 			// Save to couch
 			hmd.saveToCouch();
             } } } }
