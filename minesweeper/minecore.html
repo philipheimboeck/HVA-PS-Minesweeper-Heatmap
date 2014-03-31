@@ -396,7 +396,7 @@ function openCell(x,y) {
 		 hmd.hasWon(false);
 		 hmd.saveGameData(cellArray);
 		 //Save to Couch
-		 hmd.saveToCouch();
+		 hmd.saveToCouch(gameFormat);
 		 }
       else {
          document.images[imageIndexOf(x,y)].src =  cellOpenIm[neighborBombs].src; 
@@ -415,7 +415,7 @@ function openCell(x,y) {
 			hmd.hasWon(false);
 			hmd.saveGameData(cellArray);
 			// Save to couch
-			hmd.saveToCouch();
+			hmd.saveToCouch(gameFormat);
             } } } }
          
 

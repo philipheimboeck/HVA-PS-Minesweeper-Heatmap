@@ -50,13 +50,14 @@ var HeatMapData = (function () {
 	$.couch.urlPrefix = "http://localhost:5984";
 	var database = "minesweeper";
 	
-	this.saveToCouch = function() {
+	this.saveToCouch = function(gameFormatSize) {
 		var doc = {
 			width: this.width,
 			height: this.height,
 			fields: bombs,
 			won: this.won,
-			lastClick: [this.lastX, this.lastY]
+			lastClick: [this.lastX, this.lastY],
+			gameFormat: gameFormatSize
 		};
 
 		$.couch.db(database).saveDoc(doc, {
