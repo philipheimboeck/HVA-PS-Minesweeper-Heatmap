@@ -19,5 +19,5 @@ function getCookie(Name) {
 // Sets cookie values.
 // Core taken from Netscape JavaScript1.1 documentation.
 function setCookie(name, value) {
-          document.cookie = name + "=" + escape(value) + "; expires=Fri,31 Dec 2010 23:59:00 GMT" }
+          document.cookie = name + "=" + escape(value) + "; expires=Fri,31 Dec 2020 23:59:00 GMT" }
 

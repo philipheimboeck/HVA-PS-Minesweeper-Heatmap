@@ -6,23 +6,54 @@
 	<script src="js/jquery.couch.js"></script>
 	<script src="js/heatmap.js"></script>
 	<script type="text/javascript">
+
+var heatmap;
+$.couch.urlPrefix = "http://localhost:5984";
+
 window.onload = function(){
  
     // heatmap configuration
     var config = {
         element: document.getElementById("heatmapArea"),
-        radius: 30,
+        radius: 15,
         opacity: 50,
         legend: {
             position: 'br',
-            title: 'Example Distribution'
+            title: 'Minesweeper'
         }   
     };
     
     //creates and initializes the heatmap
-    var heatmap = h337.create(config);
- 
-    // let's get some data
+    heatmap = h337.create(config);   
+	
+	change();
+};
+
+function getGamesCount()
+{
+	$.couch.db("minesweeper").view("bombs/gamesCount", {
+		success: function(data) {
+			console.log(data);
+			var html = "<p><b>Number of Games</b><br/>";
+			for ( var i = 0; i < data.rows.length; i++ )
+			{
+				html += data.rows[i].key + " " + data.rows[i].value + "<br/>";
+			}
+			html+="</p>";
+			console.log(html);
+			$('#gamesCount').html(html);
+		},
+		error: function(status) {
+			console.log(status);
+		},
+		reduce: true,
+		group: true
+	});
+}
+
+function change()
+{
+	// let's get some data
     var heatmapData = {
         max: 10,
         data: [
@@ -33,16 +64,29 @@ window.onload = function(){
         ]
     };
 	
+	var mode = $( "#selectMode option:selected" ).val();
 	//var data;
-	$.couch.urlPrefix = "http://localhost:5984";
-	$.couch.db("minesweeper").view("bombs/numberOfBombs", {
+	
+	$.couch.db("minesweeper").view(mode, {
 		success: function(data) {
+			
+			var factorX = 30, factorY = 30;
+			
+			if ( mode == 'bombs/beginnerBombs' ) { 
+				$("heatmapArea").width(210); $("heatmapArea").height(210); 
+			}
+			else if ( mode == 'bombs/intermediateBombs' ) { 
+				$("heatmapArea").width(500); $("heatmapArea").height(500);
+			}
+			else if ( mode == 'bombs/expertBombs' ) { 
+				$("heatmapArea").width(900); $("heatmapArea").height(500);
+			}
 			
 		    for ( var i = 0; i < data.rows.length; i++ ) {
 				// Add data to map
 				var v = {
-					x: (data.rows[i].key[0] + 0.5) * data.rows.length, 
-					y: (data.rows[i].key[1] + 0.5) * data.rows.length, 
+					x: (data.rows[i].key[0] + 0.5) * factorX, 
+					y: (data.rows[i].key[1] + 0.5) * factorY, 
 					count: data.rows[i].value
 				};
 				heatmapData.data.push(v);
@@ -62,14 +106,26 @@ window.onload = function(){
 		reduce: true,
 		group: true
 	});
- 
-   
-};
+}
+
+$(document).ready(function() {
+	getGamesCount();});
+	
 </script>
   </head>
  
   <body>
-	<div id="heatmapArea" class="well" style="width:610px;padding:0;height:400px;cursor:pointer;position:relative;">
+    <div>
+	  <form>
+		<select id='selectMode' onchange='change();'>
+		  <option value='bombs/beginnerBombs' selected>Beginner</option>
+		  <option value='bombs/intermediateBombs' >Intermediate</option>
+		  <option value='bombs/expertBombs' >Expert</option>
+		</select>
+	  </form>
+	  <div id='gamesCount'>Replace this text</div>
+	</div>
+	<div id="heatmapArea" class="well" style="width:1000px;padding:0;height:550px;position:relative;">
 	</div>
   </body>
 </html>
