@@ -1,3 +1,7 @@
+- CouchDB running on Port 5984 - localhost
+- CouchDB database name: minesweeper
+
+
 Because of Same Origin Policy, set the following settings in 
 local.ini
 
